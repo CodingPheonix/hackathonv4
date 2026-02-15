@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />} />
 
         <Route path="/environment" element={<Environment />} />
-        <Route path="/agent" element={<Agent />} />
+        <Route path='/agent' element={<Agent />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
