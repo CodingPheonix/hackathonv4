@@ -102,6 +102,8 @@ function App() {
         content.classNameList.remove("scale-100", "opacity-100");
         content.classNameList.add("scale-95", "opacity-0");
 
+        solved
+
       setTimeout(() => {
           modal.classNameList.add("hidden");
       }, 300);
