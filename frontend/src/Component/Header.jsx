@@ -3,7 +3,7 @@ import React from 'react'
 const Header = () => {
   return (
 
-    <header classNameName="flex justify-between items-center px-8 py-5">
+    <header className="flex justify-between items-center px-8 py-5">
       <div className="flex items-center space-x-2">
         <div className="bg-green-500 p-2 rounded-md">
           <span className="text-white text-lg font-bold">🚜</span>
