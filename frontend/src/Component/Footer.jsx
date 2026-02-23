@@ -4,7 +4,7 @@ const Footer = () => {
 
   return (
     
-    <footer class="flex flex-col md:flex-row justify-between items-center px-8 py-6 text-gray-500 text-sm border-t">
+    <footer className="flex flex-col md:flex-row justify-between items-center px-8 py-6 text-gray-500 text-sm border-t">
       <p>© 2024 AgriSmart AI. Empowering global agriculture.</p>
       <div class="flex space-x-6 mt-3 md:mt-0">
         <a href="#">Terms of Service</a>
