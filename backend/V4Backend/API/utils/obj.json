@@ -1,0 +1,75 @@
+{
+  "plant": "TOMATO",
+  "growth_stage": "Vegetative",
+
+  "analysis_summary": {
+    "soil_moisture_status": "",
+    "temperature_status": "",
+    "light_status": "",
+    "nutrient_status": ""
+  },
+
+  "recommended_actions": [
+    {
+      "action": "Irrigation",
+      "parameter": "Soil Moisture",
+      "current_value": "22%",
+      "ideal_range": "30–40%",
+      "instruction": {
+        "method": "Manual watering (can or bottle)",
+        "water_quantity": "1.5 liters per plant per day",
+        "application_schedule": {
+          "morning": "750 ml",
+          "evening": "750 ml"
+        },
+        "frequency": "Daily",
+        "notes": "Pour water slowly near the root zone to avoid runoff"
+      },
+      "priority": "High"
+    },
+    {
+      "action": "Lighting",
+      "parameter": "Light Exposure",
+      "current_value": "4 hours/day",
+      "ideal_range": "6–8 hours/day",
+      "instruction": "Increase light exposure by 2 hours using natural sunlight or a grow light",
+      "priority": "Medium"
+    },
+    {
+      "action": "Fertilization",
+      "parameter": "Soil Nutrients (NPK)",
+      "current_values": {
+        "Nitrogen": "45 mg/kg",
+        "Phosphorus": "28 mg/kg",
+        "Potassium": "170 mg/kg"
+      },
+      "ideal_values": {
+        "Nitrogen": "80–100 mg/kg",
+        "Phosphorus": "25–40 mg/kg",
+        "Potassium": "150–200 mg/kg"
+      },
+      "instruction": {
+        "fertilizer_type": "Nitrogen-dominant fertilizer",
+        "recommended_products": [
+          "Urea (46-0-0)",
+          "DAP (18-46-0)",
+          "Miracle-Gro All Purpose Water Soluble Fertilizer (24-8-16)"
+        ],
+        "application_guidelines": "Apply 2–3 grams per plant, diluted in water, once every 10–14 days"
+      },
+      "priority": "Low"
+    }
+  ],
+
+
+
+  "feedback_plan": {
+    "next_evaluation_time": "2026-01-31T10:15:00Z",
+    "parameters_to_monitor": [
+      "soil_moisture",
+      "light_intensity",
+      "leaf_color",
+      "nitrogen_level"
+    ]
+  }
+}

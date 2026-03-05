@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocationContext } from '../context/locationContext'
+import supabase from '../utils/supabase/supabase';
 
 const Environment = () => {
 
@@ -33,6 +34,8 @@ const Environment = () => {
   return (
     <div>
       hello, this is env page
+
+      <button onClick={async () => {await supabase.auth.signOut()}}>logout</button>
     </div>
   )
 }
