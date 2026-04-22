@@ -1,60 +1,72 @@
-crop,parameter,condition,action,problem,solution,priority
-rice,temperature,low,Heat Retention,Slow growth due to low temperature,Maintain shallow water level to retain heat,Medium
-rice,temperature,low,Covering,Slow growth due to low temperature,Use plastic mulch or row covers,Medium
-rice,temperature,low,Planning,Slow growth due to low temperature,Delay transplanting until temperature improves,Medium
+crop,parameter,condition,action,problem,solution,priority,status
+rice,temperature,very_low,Emergency Heating,Severe cold halting growth,Use greenhouse or thermal covers immediately,High,-2
+rice,temperature,low,Heat Retention,Slow growth due to low temperature,Maintain shallow water level to retain heat,Medium,-1
+rice,temperature,low,Covering,Slow growth due to low temperature,Use plastic mulch or row covers,Medium,-1
+rice,temperature,low,Planning,Slow growth due to low temperature,Delay transplanting until temperature improves,Medium,-1
 
-rice,temperature,optimal,Monitoring,Healthy growth conditions,Monitor weather and maintain nutrients,Low
+rice,temperature,optimal,Monitoring,Healthy growth conditions,Monitor weather and maintain nutrients,Low,0
 
-rice,temperature,high,Cooling,Heat stress reducing yield,Increase irrigation frequency,High
-rice,temperature,high,Water Management,Heat stress reducing yield,Maintain proper water depth,High
-rice,temperature,high,Shading,Heat stress reducing yield,Use temporary shading methods,High
+rice,temperature,high,Cooling,Heat stress reducing yield,Increase irrigation frequency,High,1
+rice,temperature,high,Water Management,Heat stress reducing yield,Maintain proper water depth,High,1
+rice,temperature,high,Shading,Heat stress reducing yield,Use temporary shading methods,High,1
+rice,temperature,very_high,Emergency Cooling,Extreme heat causing crop failure,Apply continuous irrigation and full shading,High,2
 
-rice,soil_moisture,low,Irrigation,Insufficient water for paddy growth,Increase irrigation immediately,High
-rice,soil_moisture,low,Water Control,Insufficient water for paddy growth,Ensure consistent standing water,High
-rice,soil_moisture,low,Maintenance,Insufficient water for paddy growth,Repair field leaks or cracks,High
+rice,soil_moisture,very_low,Critical Irrigation,Severe drought damaging crop,Flood field immediately and restore water levels,High,-2
+rice,soil_moisture,low,Irrigation,Insufficient water for paddy growth,Increase irrigation immediately,High,-1
+rice,soil_moisture,low,Water Control,Insufficient water for paddy growth,Ensure consistent standing water,High,-1
+rice,soil_moisture,low,Maintenance,Insufficient water for paddy growth,Repair field leaks or cracks,High,-1
 
-rice,soil_moisture,optimal,Monitoring,Proper water level for growth,Maintain irrigation schedule,Low
+rice,soil_moisture,optimal,Monitoring,Proper water level for growth,Maintain irrigation schedule,Low,0
 
-rice,soil_moisture,high,Drainage,Excess water causing root stress,Improve drainage channels,Medium
-rice,soil_moisture,high,Control,Excess water causing root stress,Reduce irrigation input,Medium
-rice,soil_moisture,high,Leveling,Excess water causing root stress,Level the field evenly,Medium
+rice,soil_moisture,high,Drainage,Excess water causing root stress,Improve drainage channels,Medium,1
+rice,soil_moisture,high,Control,Excess water causing root stress,Reduce irrigation input,Medium,1
+rice,soil_moisture,high,Leveling,Excess water causing root stress,Level the field evenly,Medium,1
+rice,soil_moisture,very_high,Emergency Drainage,Flooding causing root suffocation,Drain excess water immediately,High,2
 
-rice,light,low,Exposure,Reduced photosynthesis due to low sunlight,Remove shading obstacles,Medium
-rice,light,low,Pruning,Reduced photosynthesis due to low sunlight,Trim nearby trees,Medium
-rice,light,low,Density,Reduced photosynthesis due to low sunlight,Adjust planting density,Medium
+rice,light,very_low,Artificial Lighting,Near-zero sunlight stopping photosynthesis,Use grow lights or relocate crop,High,-2
+rice,light,low,Exposure,Reduced photosynthesis due to low sunlight,Remove shading obstacles,Medium,-1
+rice,light,low,Pruning,Reduced photosynthesis due to low sunlight,Trim nearby trees,Medium,-1
+rice,light,low,Density,Reduced photosynthesis due to low sunlight,Adjust planting density,Medium,-1
 
-rice,light,optimal,Monitoring,Good sunlight exposure,Monitor seasonal variation,Low
+rice,light,optimal,Monitoring,Good sunlight exposure,Monitor seasonal variation,Low,0
 
-rice,light,high,Water Management,Excess sunlight increasing evaporation,Maintain adequate water levels,Medium
-rice,light,high,Shading,Excess sunlight increasing evaporation,Use light shading if extreme,Medium
-rice,light,high,Soil Care,Excess sunlight increasing evaporation,Apply mulch to reduce evaporation,Medium
+rice,light,high,Water Management,Excess sunlight increasing evaporation,Maintain adequate water levels,Medium,1
+rice,light,high,Shading,Excess sunlight increasing evaporation,Use light shading if extreme,Medium,1
+rice,light,high,Soil Care,Excess sunlight increasing evaporation,Apply mulch to reduce evaporation,Medium,1
+rice,light,very_high,Full Shade Protection,Extreme sunlight causing leaf burn,Apply full shading and frequent irrigation,High,2
 
-tomato,temperature,low,Protection,Cold stress affecting fruit development,Use greenhouse or poly tunnel,High
-tomato,temperature,low,Covering,Cold stress affecting fruit development,Cover plants at night,High
-tomato,temperature,low,Planning,Cold stress affecting fruit development,Delay planting to warmer period,High
+tomato,temperature,very_low,Emergency Protection,Frost conditions killing plants,Use heaters or greenhouse immediately,High,-2
+tomato,temperature,low,Protection,Cold stress affecting fruit development,Use greenhouse or poly tunnel,High,-1
+tomato,temperature,low,Covering,Cold stress affecting fruit development,Cover plants at night,High,-1
+tomato,temperature,low,Planning,Cold stress affecting fruit development,Delay planting to warmer period,High,-1
 
-tomato,temperature,optimal,Monitoring,Ideal temperature for fruiting,Maintain current care and ventilation,Low
+tomato,temperature,optimal,Monitoring,Ideal temperature for fruiting,Maintain current care and ventilation,Low,0
 
-tomato,temperature,high,Shading,Heat stress causing flower drop,Install shade nets,High
-tomato,temperature,high,Irrigation,Heat stress causing flower drop,Increase watering frequency,High
-tomato,temperature,high,Selection,Heat stress causing flower drop,Use heat-resistant varieties,High
+tomato,temperature,high,Shading,Heat stress causing flower drop,Install shade nets,High,1
+tomato,temperature,high,Irrigation,Heat stress causing flower drop,Increase watering frequency,High,1
+tomato,temperature,high,Selection,Heat stress causing flower drop,Use heat-resistant varieties,High,1
+tomato,temperature,very_high,Emergency Cooling,Extreme heat killing flowers and fruits,Use heavy shading and misting systems,High,2
 
-tomato,soil_moisture,low,Irrigation,Dry soil leading to plant stress,Increase irrigation,High
-tomato,soil_moisture,low,Soil Care,Dry soil leading to plant stress,Apply organic mulch,High
-tomato,soil_moisture,low,Efficiency,Dry soil leading to plant stress,Use drip irrigation system,High
+tomato,soil_moisture,very_low,Critical Irrigation,Severe dryness killing roots,Water deeply and immediately,High,-2
+tomato,soil_moisture,low,Irrigation,Dry soil leading to plant stress,Increase irrigation,High,-1
+tomato,soil_moisture,low,Soil Care,Dry soil leading to plant stress,Apply organic mulch,High,-1
+tomato,soil_moisture,low,Efficiency,Dry soil leading to plant stress,Use drip irrigation system,High,-1
 
-tomato,soil_moisture,optimal,Monitoring,Good moisture for growth,Maintain watering schedule,Low
+tomato,soil_moisture,optimal,Monitoring,Good moisture for growth,Maintain watering schedule,Low,0
 
-tomato,soil_moisture,high,Control,Overwatering causing root rot,Reduce watering frequency,High
-tomato,soil_moisture,high,Drainage,Overwatering causing root rot,Improve soil drainage,High
-tomato,soil_moisture,high,Structure,Overwatering causing root rot,Use raised beds,High
+tomato,soil_moisture,high,Control,Overwatering causing root rot,Reduce watering frequency,High,1
+tomato,soil_moisture,high,Drainage,Overwatering causing root rot,Improve soil drainage,High,1
+tomato,soil_moisture,high,Structure,Overwatering causing root rot,Use raised beds,High,1
+tomato,soil_moisture,very_high,Emergency Drainage,Severe waterlogging killing roots,Drain water and aerate soil immediately,High,2
 
-tomato,light,low,Relocation,Insufficient light causing weak growth,Move plants to sunnier area,Medium
-tomato,light,low,Adjustment,Insufficient light causing weak growth,Reduce shading structures,Medium
-tomato,light,low,Pruning,Insufficient light causing weak growth,Prune excess foliage,Medium
+tomato,light,very_low,Artificial Lighting,No sunlight stopping growth,Use grow lights immediately,High,-2
+tomato,light,low,Relocation,Insufficient light causing weak growth,Move plants to sunnier area,Medium,-1
+tomato,light,low,Adjustment,Insufficient light causing weak growth,Reduce shading structures,Medium,-1
+tomato,light,low,Pruning,Insufficient light causing weak growth,Prune excess foliage,Medium,-1
 
-tomato,light,optimal,Monitoring,Proper sunlight for fruiting,Maintain exposure,Low
+tomato,light,optimal,Monitoring,Proper sunlight for fruiting,Maintain exposure,Low,0
 
-tomato,light,high,Shading,Excess light causing leaf burn,Use shade nets during peak hours,Medium
-tomato,light,high,Irrigation,Excess light causing leaf burn,Increase watering,Medium
-tomato,light,high,Soil Care,Excess light causing leaf burn,Apply mulch to protect roots,Medium
+tomato,light,high,Shading,Excess light causing leaf burn,Use shade nets during peak hours,Medium,1
+tomato,light,high,Irrigation,Excess light causing leaf burn,Increase watering,Medium,1
+tomato,light,high,Soil Care,Excess light causing leaf burn,Apply mulch to protect roots,Medium,1
+tomato,light,very_high,Full Shade Protection,Extreme sunlight scorching plants,Provide full shade and cooling irrigation,High,2

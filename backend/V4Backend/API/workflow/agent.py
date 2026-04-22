@@ -8,30 +8,22 @@ from langchain.messages import SystemMessage
 from pydantic import BaseModel
 
 from .state import MessagesState
-from langchain_google_genai import ChatGoogleGenerativeAI
+from .tools import *
+from langchain_openrouter import ChatOpenRouter
 from langchain.agents import create_agent
-from langchain_mcp_adapters.client import MultiServerMCPClient
 
 load_dotenv()
 
-model = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    google_api_key=os.getenv("GOOGLE_API_KEY"),
-    temperature=0,
-    timeout=30
-)
+# model = ChatGoogleGenerativeAI(
+#     model="gemini-2.0-flash",
+#     google_api_key=os.getenv("GOOGLE_API_KEY"),
+#     temperature=0,
+#     timeout=30
+# )
 
-client = MultiServerMCPClient(
-    {
-        "weather": {
-            "transport": "http",
-            "url": "http://localhost:8000/mcp/temp/"
-        }
-    }
-)
 
-mcp_tools = client.get_tools()
-
+os.environ["OPENROUTER_API_KEY"] = os.getenv("OPENROUTER_API_KEY")
+model = ChatOpenRouter(model="openai/gpt-oss-20b:free")
 
 # SUBAGENT TO EXTRACT INFORMATION
 DECIDE_EXTRACT_INFO_PROMPT = (
@@ -48,89 +40,33 @@ class ExtractInfoResponse(BaseModel):
 
 data_extraction_agent = create_agent(
     model,
-    tools=[mcp_tools],
     system_prompt=DECIDE_EXTRACT_INFO_PROMPT,
     response_format=ExtractInfoResponse
 )
 
-# SUBAGENT TO ANALYSE TEMPERATURE
-DECIDE_TEMP_PROMPT = (
-    "You are a helpful assistant"
-    "Use available MCP tools to fetch the suitable temperature range for Rice using get_range. "
-    "Use get_range to get a range of suitable temperature for Rice. Column 'label' - value 'rice'"
-    "Return a response: temp_status"
-    "Use status codes: -2 for below limit, -1 for below ideal range, 0 for ideal range, 1 for above ideal range, 2 for over range"
-)
+# SUB AGENT FOR SUPERVISOR
+@tool
+def extract_data(request: str) -> str:
+    """Extract weather information from user context.
 
-class TempResponse(BaseModel):
-    temp_status: int
+    Use this to analyze status of temperature, soil_moisture and light status
 
-temperature_agent = create_agent(
-    model,
-    tools=[mcp_tools],
-    system_prompt=DECIDE_TEMP_PROMPT,
-    response_format=TempResponse
-)
-
-# SUBAGENT TO ANALYSE SOIL MOISTURE
-DECIDE_SOIL_MOISTURE_PROMPT = (
-    "You are a helpful assistant. "
-    "You will receive soil moisture readings for 5 days of a week. "
-    "Use a fixed range of rice soil moisture requirements"
-    "Compare the given soil moisture values with the retrieved range. "
-    "Return a response: soil_status. "
-    "Use status codes: "
-    "-2 for critically dry (below minimum limit), "
-    "-1 for below ideal range, "
-    "0 for ideal range, "
-    "1 for above ideal range, "
-    "2 for over-saturated (above maximum limit)."
-)
-
-class SoilMoistureResponse(BaseModel):
-    soil_status: int
-
-soil_moisture_agent = create_agent(
-    model,
-    tools=[mcp_tools],
-    system_prompt=DECIDE_SOIL_MOISTURE_PROMPT,
-    response_format=SoilMoistureResponse
-)
-
-# SUBAGENT TO ANALYSE LIGHT STATUS
-DECIDE_LIGHT_STATUS_PROMPT = (
-    "You are a helpful assistant. "
-    "Use available MCP tools to fetch the suitable light range for Rice using get_range. "
-    "Column 'label' should have value 'rice'. "
-    "Compare the given light values with the retrieved range. "
-    "Return a response: light_status. "
-    "Use status codes: "
-    "-2 for insufficient light (far below minimum), "
-    "-1 for below ideal range, "
-    "0 for optimal light range, "
-    "1 for above ideal range, "
-    "2 for excessive light exposure."
-)
-
-class LightResponse:
-    light_status: int
-
-light_agent = create_agent(
-    model,
-    tools=[mcp_tools],
-    system_prompt=DECIDE_LIGHT_STATUS_PROMPT,
-    response_format=LightResponse
-)
+    Input: Natural language Weather (e.g., 'Temperature records: [22.3, 21.8, 23.5, 24.3, 22.1]; soil moisture: 0.175; light status: [10.1, 10.19, 10.2]')
+    """
+    result = data_extraction_agent.invoke({
+        "messages": [{"role": "user", "content": request}]
+    })
+    return result["messages"][-1].text
 
 # AGENT TO COMPILE AVAILABLE DATA
 COMPILER_PROMPT = (
     "You are an intelligent agent"
-    "You will be given analysed data"
-    "There are 3 sections: Temperature, Soil Moisture, Light Status"
-    "You will compile and format the data in the available structured response"
+    "Your action will contain 3 steps"
+    "Firstly get the status codes of data"
+    "You will match statuses, compile and format the data in the available structured response"
+    "Use tool fetch_solutions to get recommended suggestions for each criteria "
     "USE ONLY THE FIELDS NECESSARY. If you do not have a particular data, do not use that field"
     "Criteria for magnitude analysis: -2 -> very lower than range, -1 -> slightly lower than range, 0 -> in range, 1 -> slightly above range, 2 -> very much above range"
-    "Use mcp tools for getting recommendations for any type of abnormal situations"
     "Finalise them into the analysis summary and recommendations "
 )
 
@@ -148,7 +84,7 @@ class Recommendation(BaseModel):
     priority: Literal["High", "Medium", "Low"]
 
 
-class ExtractInfoResponse(BaseModel):
+class ExtractCompilerInfoResponse(BaseModel):
     plant: str
     growth_stage: str
     analysis_summary: AnalysisSummary
@@ -157,105 +93,43 @@ class ExtractInfoResponse(BaseModel):
 
 compiler_agent = create_agent(
     model,
+    tools=[fetch_solutions],
     system_prompt=COMPILER_PROMPT,
-    response_format=LightResponse
+    response_format=ExtractCompilerInfoResponse
 )
 
+@tool
+def compile_weather_status_data(request: str) -> str:
+    """Extract weather information from previous agents outputs.
 
-def parse_message_content(msg):
-    content = msg.content
+    Use this to analyze and compile a report to provide analysis and recommendations.
 
-    # convert list content to string
-    if isinstance(content, list):
-        content = "".join(str(x) for x in content)
-
-    # remove ```json ``` wrappers if present
-    content = re.sub(r"```json|```", "", content).strip()
-
-    return json.loads(content)
-
-def compiler(state: MessagesState):
-
+    Input: temp_status: 1, soil_status: 0, light_status: -1
     """
-    Compile the decisions from previous steps and provide a final recommendation for the farmer.
-    """
+    result = compiler_agent.invoke({
+        "messages": [{"role": "user", "content": request}]
+    })
+    return result["messages"][-1].text
 
-    file_path = os.path.join(os.path.dirname(__file__), '../utils/obj.json')
-    with open(file_path, 'r') as f:
-        data = json.load(f)
+WEATHER_SUPERVISOR_PROMPT = (
+    "You are an intelligent agent. "
+    "You are given task to evaluate and produce a report based on weather conditions affecting plant"
+    "Use analyse_temperature_data to get temperature status; request -> Find temp status. temperature list: [....]"
+    "Use analyse_light_status_data to get temperature status; request -> Find temp status. light status list: [....]"
+    "Use analyse_soil_moisture_data to get temperature status; request -> Find temp status. soil moisture list: [....]"
+    "Use compile_weather_status_data to compile and create report; request -> {send analysed statuses of temp, light and soil}"
+    "Read the final compiled analysis and generate it's readable text format in bullet points"
+    "Provide the output as a single string"
+)
 
-        temp_data = parse_message_content(state["messages"][-3])
-        soil_data = parse_message_content(state["messages"][-2])
-        uvi_data  = parse_message_content(state["messages"][-1])
+class WeatherSupervisorResponse(BaseModel):
+    weather_report: str
 
-        temp_status = temp_data["temp_status"]
-        soil_status = soil_data["soil_moisture_status"]
-        uvi_status = uvi_data["uvi_status"]
-
-    return {
-        "messages": [
-            model.invoke(
-                [
-                    SystemMessage(
-                        content=f"""
-                        You are an agricultural assistant that converts sensor analysis into practical farming recommendations.
-
-                        Input status codes:
-                        -2 = Under use
-                        -1 = Below Ideal Range
-                        0 = Ideal Range
-                        1 = Above Ideal Range
-                        2 = Overuse
-
-                        Current sensor evaluation:
-                        {{
-                            "temperature_status": {temp_status},
-                            "soil_moisture_status": {soil_status},
-                            "uvi_status": {uvi_status}
-                        }}
-
-                        Step 1:
-                        Convert the numeric status codes into their meaning.
-
-                        Step 2:
-                        If a parameter is NOT in the ideal range (0), generate a recommendation to correct it.
-
-                        Step 3:
-                        If a parameter is already ideal (0), do not create an action for it.
-
-                        Return ONLY valid JSON.
-
-                        Use EXACTLY this structure:
-
-                        {{
-                        "plant": "<Plant Name>",
-                        "growth_stage": "Vegetative",
-                        "analysis_summary": {{
-                            "temperature_status": "<converted meaning>",
-                            "soil_moisture_status": "<converted meaning>",
-                            "uvi_status": "<converted meaning>"
-                        }},
-                        "recommendations": [
-                            {{
-                            "action": "<type of action>",
-                            "parameter": "<sensor parameter>",
-                            "problem": "<short description>",
-                            "solution": "<clear instruction>",
-                            "priority": "High | Medium | Low"
-                            }}
-                        ]
-                        }}
-
-                        Rules:
-                        - Convert numeric codes to text meanings.
-                        - Do NOT copy the input numbers.
-                        - Do NOT invent sensor readings.
-                        - Only recommend actions for non-ideal parameters.
-                        - Return ONLY JSON.
-                        - Create for all and only for the parameters that are not ideal.
-                        """
-                        )
-                ]
-            )
-        ]
-    }
+weather_supervisor_agent = create_agent(
+    model,
+    tools=[
+        compile_weather_status_data
+    ],
+    system_prompt=WEATHER_SUPERVISOR_PROMPT,
+    response_format=WeatherSupervisorResponse
+)
