@@ -1,10 +1,13 @@
 import json
 import os
+from dotenv import load_dotenv
 from typing import Any
 
 import requests
 
-from V4Backend.API.models import Polygon
+from ..models import Polygon
+
+load_dotenv()
 
 AGROMONITORING_KEY = os.getenv("AGROMONITORING_KEY")
 
@@ -25,7 +28,7 @@ def create_bounding_box(lon, lat, offset=0.01):
 
 def createPolygon(latitude: float,longitude: float) -> str | None:
 
-    url = f"http://api.agromonitoring.com/agro/1.0/polygons?appid={AGROMONITORING_KEY}"
+    url = f"http://api.agromonitoring.com/agro/1.0/polygons?appid={AGROMONITORING_KEY}&duplicated=true"
     headers = {
         "Content-Type": "application/json"
     }
@@ -43,8 +46,9 @@ def createPolygon(latitude: float,longitude: float) -> str | None:
                }
     }
 
-    response = requests.post(url, headers=headers, json=json.dumps(payload))
+    response = requests.post(url, headers=headers, json=payload)
     data = response.json()
+    print(data)
 
     if response.status_code == 201:
 
@@ -61,14 +65,22 @@ def createPolygon(latitude: float,longitude: float) -> str | None:
 def isPolygonExists(latitude: float, longitude: float) -> bool:
     try:
         polygon = Polygon.objects.get(latitude=latitude, longitude=longitude)
-        return True
+        return True if polygon else False
     except Polygon.DoesNotExist:
         return False
 
 def getPolygonId(latitude: float, longitude: float) -> str | None:
     try:
-        polygon = Polygon.objects.get(latitude=latitude, longitude=longitude)
-        return polygon.polygon_id
+        polygon = (
+            Polygon.objects
+            .filter(latitude=latitude, longitude=longitude)
+            .order_by("-id")   # latest created (assuming auto-increment id)
+            .first()
+        )
+        if polygon:
+            return polygon.polygon_id
+
+        return None
     except Polygon.DoesNotExist:
         return None
 

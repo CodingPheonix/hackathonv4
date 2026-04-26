@@ -1,0 +1,33 @@
+crop,disease,symptoms,cause,solution,priority
+rice,Leaf Blast,diamond-shaped lesions on leaves, fungal infection (Magnaporthe oryzae),Apply fungicide like tricyclazole,High
+rice,Leaf Blast,brown spots with gray center, fungal infection (Magnaporthe oryzae),Use resistant rice varieties,High
+rice,Leaf Blast,leaf drying from tips, fungal infection (Magnaporthe oryzae),Avoid excess nitrogen fertilizer,Medium
+
+rice,Bacterial Leaf Blight,yellowing from leaf tip, bacterial infection (Xanthomonas oryzae),Use disease-free seeds,High
+rice,Bacterial Leaf Blight,wilting of leaves, bacterial infection (Xanthomonas oryzae),Apply copper-based bactericides,High
+rice,Bacterial Leaf Blight,leaf edges turning dry and white, bacterial infection (Xanthomonas oryzae),Ensure proper field drainage,Medium
+
+rice,Sheath Blight,oval green-gray lesions on sheath, fungal infection (Rhizoctonia solani),Apply validamycin fungicide,High
+rice,Sheath Blight,plants lodging or falling, fungal infection (Rhizoctonia solani),Reduce plant density,Medium
+rice,Sheath Blight,lesions spreading upwards, fungal infection (Rhizoctonia solani),Improve air circulation in field,Medium
+
+rice,Brown Spot,small brown circular spots, fungal infection (Bipolaris oryzae),Apply mancozeb fungicide,Medium
+rice,Brown Spot,spots with yellow halo, fungal infection (Bipolaris oryzae),Improve soil nutrition (NPK balance),Medium
+rice,Brown Spot,poor grain filling, fungal infection (Bipolaris oryzae),Use certified seeds,High
+
+
+tomato,Early Blight,concentric rings on older leaves, fungal infection (Alternaria solani),Apply chlorothalonil fungicide,High
+tomato,Early Blight,yellowing around spots, fungal infection (Alternaria solani),Remove infected leaves,Medium
+tomato,Early Blight,leaf drop from bottom, fungal infection (Alternaria solani),Practice crop rotation,Medium
+
+tomato,Late Blight,water-soaked lesions on leaves, fungal infection (Phytophthora infestans),Apply metalaxyl fungicide,High
+tomato,Late Blight,white mold under leaves, fungal infection (Phytophthora infestans),Avoid overhead irrigation,High
+tomato,Late Blight,rapid plant decay, fungal infection (Phytophthora infestans),Destroy infected plants immediately,High
+
+tomato,Leaf Curl Virus,upward curling of leaves, viral infection (whitefly transmitted),Control whiteflies using neem oil,High
+tomato,Leaf Curl Virus,stunted plant growth, viral infection (whitefly transmitted),Use resistant varieties,High
+tomato,Leaf Curl Virus,yellowing and deformation, viral infection (whitefly transmitted),Install insect traps,Medium
+
+tomato,Bacterial Spot,small dark spots on leaves, bacterial infection (Xanthomonas spp.),Apply copper sprays,Medium
+tomato,Bacterial Spot,leaf yellowing and drop, bacterial infection (Xanthomonas spp.),Avoid working with wet plants,Medium
+tomato,Bacterial Spot,spots on fruits, bacterial infection (Xanthomonas spp.),Use disease-free seeds,High

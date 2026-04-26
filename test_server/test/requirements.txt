@@ -1,0 +1,8 @@
+fastapi[standard]
+langchain-mcp-adapters
+langchain-openrouter
+langchain
+fastmcp
+pandas
+pydantic
+langchain-core
